@@ -1,323 +1,133 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All-In-One Earning App</title>
-    
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-9596330865029867" crossorigin="anonymous"></script>
-    <meta name="google-adsense-account" content="ca-app-pub-9596330865029867">
-    <style>
-        :root { --primary: #27ae60; --dark: #2c3e50; --bg: #f4f7f6; --phonepe: #6739b7; --paytm: #00baf2; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; text-align: center; }
-        
-        /* Auth Styles */
-        #authPage { display: block; padding: 30px 20px; background: var(--bg); height: 100vh; position: fixed; width: 100%; z-index: 1000; top: 0; left: 0; box-sizing: border-box; }
-        .auth-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
-        .auth-toggle { margin-top: 15px; color: var(--primary); cursor: pointer; font-weight: bold; text-decoration: underline; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My App</title>
 
-        /* App Styles */
-        .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
-        .active { display: block; }
-        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-        .card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .task-box { background: white; padding: 25px; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; font-weight: bold; border-left: 6px solid var(--primary); cursor: pointer; }
-        .pp-task-card { background: linear-gradient(135deg, #6739b7, #512da8); color: white; padding: 20px; border-radius: 15px; margin: 15px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 6px 15px rgba(103, 57, 183, 0.3); }
-        .pp-icon { width: 50px; height: 50px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-        .pp-icon img { width: 35px; }
-        .pp-info { text-align: left; flex: 1; margin-left: 15px; }
-        .pp-info b { font-size: 18px; display: block; }
-        .pp-amount { font-size: 22px; font-weight: bold; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 8px; }
-        
-        /* Refer Styling */
-        .refer-section { background: #e8f5e9; border: 2px dashed var(--primary); padding: 15px; border-radius: 12px; margin-bottom: 15px; }
-        .refer-code-box { font-size: 28px; font-weight: bold; color: var(--primary); letter-spacing: 2px; margin: 10px 0; }
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f2f2f2;
+}
 
-        .paytm-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 6px 15px rgba(0,0,0,0.1); margin: 15px 0; border: 1px solid #ddd; }
-        .paytm-header { background: var(--paytm); color: white; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
-        .paytm-header img { width: 30px; background: white; border-radius: 4px; padding: 2px; }
-        .step-row { display: flex; align-items: center; justify-content: space-between; background: #f9f9f9; padding: 12px; border-radius: 10px; margin: 10px; border-left: 5px solid var(--paytm); text-align: left; }
-        .task-action-btn { background: var(--paytm); color: white; border: none; padding: 8px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 5px; font-size: 12px; }
-        #capCode { font-size: 28px; font-weight: bold; background: #eee; padding: 15px; border-radius: 10px; letter-spacing: 8px; margin-bottom: 15px; }
-        input { width: 90%; padding: 15px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; }
-        #wheel-container { position: relative; width: 200px; height: 200px; margin: 20px auto; }
-        #wheel { width: 100%; height: 100%; border: 6px solid var(--dark); border-radius: 50%; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1); background: conic-gradient(#27ae60 0deg 120deg, #e67e22 120deg 240deg, #3498db 240deg 360deg); }
-        .segment { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: flex-start; font-weight: bold; color: white; font-size: 20px; padding-top: 15px; }
-        .s1 { transform: rotate(60deg); } .s2 { transform: rotate(180deg); } .s3 { transform: rotate(300deg); }
-        .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 30px; z-index: 10; color: #e74c3c; }
-        .hist-icon-btn { position: absolute; right: 20px; top: 15px; background: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); cursor: pointer; font-size: 20px; }
-        .modal { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
-        .modal-content { background: white; margin: 15% auto; padding: 20px; width: 85%; border-radius: 15px; position: relative; text-align: left; }
-        .nav { position: fixed; bottom: 0; width: 100%; background: white; display: none; border-top: 1px solid #ddd; padding: 12px 0; z-index: 100; }
-        .nav-item { flex: 1; color: #95a5a6; cursor: pointer; font-size: 14px; font-weight: bold; }
-        .active-nav { color: var(--primary); }
-        .admin-box { background: #fff; padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 10px; text-align: left; }
-        .adm-btn { padding: 5px 10px; border: none; border-radius: 5px; color: white; cursor: pointer; margin-right: 5px; }
+.box{
+  width:90%;
+  max-width:400px;
+  margin:80px auto;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
 
-        .w-levels { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .w-btn { padding: 12px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; background: #fff; transition: 0.2s; }
-        .w-btn.selected { border-color: var(--primary); background: #eafaf1; color: var(--primary); }
-    </style>
+input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  background:#28a745;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  font-size:16px;
+}
+
+a{
+  color:green;
+  text-decoration:none;
+}
+
+#home{
+  display:none;
+  padding:20px;
+}
+
+.nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#fff;
+  display:flex;
+  justify-content:space-around;
+  border-top:1px solid #ccc;
+}
+
+.nav div{
+  padding:10px;
+  font-size:14px;
+}
+</style>
 </head>
+
 <body>
 
-    <div id="authPage">
-        <h2 id="authTitle">Sign Up</h2>
-        <div class="auth-card">
-            <input type="email" id="userEmail" placeholder="Email Address">
-            <input type="password" id="userPass" placeholder="Password (Min 6 chars)">
-            <div id="referInputBox">
-                <input type="text" id="joinReferCode" placeholder="Refer Code (Optional)">
-            </div>
-            <div id="signUpBtnBox">
-                <button class="btn" onclick="handleSignUp()">Sign Up Now</button>
-                <div class="auth-toggle" onclick="toggleAuth(false)">Already have an account? Login</div>
-            </div>
-            <div id="loginBtnBox" style="display:none;">
-                <button class="btn" onclick="handleLogin()">Login Now</button>
-                <div class="auth-toggle" onclick="toggleAuth(true)">New here? Create Account</div>
-            </div>
-        </div>
-    </div>
+<!-- SIGN UP PAGE -->
+<div id="signup" class="box">
+  <h2 align="center">Sign Up</h2>
+  <input type="email" placeholder="Email">
+  <input type="password" placeholder="Password">
+  <button onclick="openHome()">Sign Up Now</button>
+  <p align="center">
+    <a href="#" onclick="showLogin()">Already have account? Login</a>
+  </p>
+</div>
 
-    <div id="mainApp" style="display:none;">
-        <div id="homePage" class="page active">
-            <h2 onclick="openAdmin()">नमस्ते!</h2>
-            <div class="card" style="background:var(--dark); color:white;">
-                <p>आपका बैलेंस</p>
-                <h1>₹<span id="balHome">0</span></h1>
-                <small id="userDisplay"></small>
-            </div>
+<!-- LOGIN PAGE -->
+<div id="login" class="box" style="display:none">
+  <h2 align="center">Login</h2>
+  <input type="email" placeholder="Email">
+  <input type="password" placeholder="Password">
+  <button onclick="openHome()">Login</button>
+  <p align="center">
+    <a href="#" onclick="showSignup()">Create new account</a>
+  </p>
+</div>
 
-            <div class="refer-section">
-                <span>👫 Refer & Earn (Both Get ₹10)</span>
-                <div class="refer-code-box" id="displayMyCode">...</div>
-                <button class="btn" style="padding:10px; font-size:14px; background:var(--dark);" onclick="copyRefer()">Copy Code</button>
-            </div>
+<!-- HOME PAGE -->
+<div id="home">
+  <h2>Welcome 🎉</h2>
+  <p>Wallet Balance: ₹0</p>
 
-            <div class="pp-task-card" onclick="openStarsLink()">
-                <div class="pp-icon"><img src="https://img.icons8.com/color/96/phone-pe.png" alt="PhonePe"></div>
-                <div class="pp-info"><b>PhonePe Offer</b><span>Click & Earn Reward</span></div>
-                <div class="pp-amount">₹100</div>
-            </div>
-            <div class="paytm-card">
-                <div class="paytm-header"><img src="https://img.icons8.com/color/48/paytm.png"> Paytm Offer (₹100)</div>
-                <div class="step-row" id="pRow1">
-                    <div style="flex:1"><b>Step 1: Register</b><br><small>Bank Add & Login</small><br><button class="task-action-btn" id="pBtn1" onclick="doPaytmStep(1)">Install Now</button></div>
-                    <div style="color:var(--primary); font-weight:bold;">₹50</div>
-                </div>
-                <div class="step-row" id="pRow2" style="opacity:0.5;">
-                    <div style="flex:1"><b>Step 2: Pay ₹1+</b><br><small>Pehla payment karein</small><br><button class="task-action-btn" id="pBtn2" onclick="doPaytmStep(2)" disabled style="background:#aaa;">Claim Reward</button></div>
-                    <div style="color:var(--primary); font-weight:bold;">₹50</div>
-                </div>
-            </div>
-        </div>
+  <h3>Tasks</h3>
+  <ul>
+    <li>Task 1</li>
+    <li>Task 2</li>
+  </ul>
+</div>
 
-        <div id="tasksPage" class="page">
-            <h3>दैनिक कार्य</h3>
-            <div class="task-box" onclick="openSubTask('spinTask')"><span>🎡 स्पिन व्हील</span><small id="sCount">0/3</small></div>
-            <div class="task-box" onclick="openSubTask('capTask')"><span>🧩 कैप्चा</span><small id="cCount">0/3</small></div>
-        </div>
+<!-- BOTTOM MENU -->
+<div class="nav" id="nav" style="display:none">
+  <div>Home</div>
+  <div>Wallet</div>
+  <div>Profile</div>
+</div>
 
-        <div id="spinTask" class="page">
-            <button class="btn" style="background:#95a5a6; width:auto; padding:5px 15px; margin-bottom:15px;" onclick="showCol('tasksPage', 'nTasks')">← Back</button>
-            <div class="card">
-                <h4>🎡 स्पिन व्हील (<span id="sLimit">0</span>/3)</h4>
-                <div id="wheel-container"><div class="pointer">▼</div><div id="wheel"><div class="segment s1">₹1</div><div class="segment s2">₹2</div><div class="segment s3">₹3</div></div></div>
-                <button id="spinBtn" class="btn" onclick="doSpin()">स्पिन करें</button>
-            </div>
-        </div>
+<script>
+function openHome(){
+  document.getElementById("signup").style.display="none";
+  document.getElementById("login").style.display="none";
+  document.getElementById("home").style.display="block";
+  document.getElementById("nav").style.display="flex";
+}
 
-        <div id="capTask" class="page">
-            <button class="btn" style="background:#95a5a6; width:auto; padding:5px 15px; margin-bottom:15px;" onclick="showCol('tasksPage', 'nTasks')">← Back</button>
-            <div class="card">
-                <h4>🧩 कैप्चा (<span id="cLimit">0</span>/3)</h4>
-                <div id="capCode"></div>
-                <input type="text" id="capInput" placeholder="Enter code">
-                <button class="btn" onclick="doCaptcha()">क्लेम करें</button>
-            </div>
-        </div>
+function showLogin(){
+  document.getElementById("signup").style.display="none";
+  document.getElementById("login").style.display="block";
+}
 
-        <div id="withdrawPage" class="page" style="position:relative;">
-            <div class="hist-icon-btn" onclick="toggleModal(true)">🕒</div>
-            <h3>पैसे निकालें</h3>
-            <div class="card">
-                <p>निकालने के लिए बैलेंस</p>
-                <h2 style="color:var(--primary)">₹<span id="balWithdraw">0</span></h2>
-            </div>
-            <div class="card">
-                <input type="text" id="upiId" placeholder="UPI ID">
-                <div class="w-levels" id="wLevelBox">
-                    <div class="w-btn" id="wb10" onclick="selectWAmt(10)">₹10</div>
-                    <div class="w-btn" id="wb50" onclick="selectWAmt(50)">₹50</div>
-                    <div class="w-btn" id="wb100" onclick="selectWAmt(100)">₹100</div>
-                    <div class="w-btn" id="wb200" onclick="selectWAmt(200)">₹200</div>
-                    <div class="w-btn" id="wb300" onclick="selectWAmt(300)">₹300</div>
-                    <div class="w-btn" id="wb500" onclick="selectWAmt(500)">₹500</div>
-                </div>
-                <br>
-                <button class="btn" style="background:#e67e22" id="withdrawBtn">विड्रॉ करें</button>
-            </div>
-        </div>
+function showSignup(){
+  document.getElementById("login").style.display="none";
+  document.getElementById("signup").style.display="block";
+}
+</script>
 
-        <div id="adminPage" class="page">
-            <h3>Admin Panel</h3>
-            <div id="adminList"></div>
-            <button class="btn" style="background:#95a5a6; margin-top:10px;" onclick="showCol('homePage', 'nHome')">Back</button>
-        </div>
-
-        <nav id="bottomNav" class="nav">
-            <div class="nav-item active-nav" id="nHome" onclick="showCol('homePage', 'nHome')">🏠<br>Home</div>
-            <div class="nav-item" id="nTasks" onclick="showCol('tasksPage', 'nTasks')">🎯<br>Tasks</div>
-            <div class="nav-item" id="nWithdraw" onclick="showCol('withdrawPage', 'nWithdraw')">💰<br>Wallet</div>
-        </nav>
-    </div>
-
-    <div id="historyModal" class="modal">
-        <div class="modal-content"><span onclick="toggleModal(false)" style="float:right; cursor:pointer; font-size:24px;">&times;</span><h4>निकासी इतिहास</h4><div id="withdrawHistory"></div></div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, set, onValue, update, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCPXY9pfY2vrKNEOgenBkYpQqa2SSUQLTk",
-            authDomain: "talks-b6037.firebaseapp.com",
-            projectId: "talks-b6037",
-            storageBucket: "talks-b6037.firebasestorage.app",
-            messagingSenderId: "231660762364",
-            appId: "1:231660762364:web:e1a9589b00d11221d0d379",
-            measurementId: "G-TDCDG0YLW3"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        function generate6DigitCode() {
-            let chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-            let code = "";
-            for (let i = 0; i < 6; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
-        }
-
-        window.toggleAuth = (isSignUp) => {
-            document.getElementById('authTitle').innerText = isSignUp ? "Sign Up" : "Login";
-            document.getElementById('signUpBtnBox').style.display = isSignUp ? "block" : "none";
-            document.getElementById('loginBtnBox').style.display = isSignUp ? "none" : "block";
-            document.getElementById('referInputBox').style.display = isSignUp ? "block" : "none";
-        };
-
-        window.handleSignUp = async function() {
-            let email = document.getElementById('userEmail').value.trim();
-            let pass = document.getElementById('userPass').value.trim();
-            let refCodeUsed = document.getElementById('joinReferCode').value.trim().toUpperCase();
-
-            if(!email.includes("@") || pass.length < 6) return alert("Valid data fill karein");
-            let safeEmail = email.replace(/\./g, ',');
-            const userRef = ref(db, 'users/' + safeEmail);
-            const snap = await get(userRef);
-            if(snap.exists()) return alert("Already registered!");
-
-            let myNewCode = generate6DigitCode();
-            let startingBalance = 0; // Default joining balance
-
-            // REFER LOGIC: Both get ₹10
-            if(refCodeUsed !== "") {
-                const usersRef = ref(db, 'users');
-                const usersSnap = await get(usersRef);
-                if(usersSnap.exists()){
-                    let allUsers = usersSnap.val();
-                    let foundReferrer = false;
-                    for(let key in allUsers){
-                        if(allUsers[key].myReferCode === refCodeUsed){
-                            // 1. Friend (Referrer) ko ₹10 milenge
-                            let referrerOldBal = allUsers[key].balance || 0;
-                            update(ref(db, 'users/' + key), { balance: referrerOldBal + 10 });
-                            
-                            // 2. Naye user ko ₹10 joining bonus milega
-                            startingBalance = 10; 
-                            foundReferrer = true;
-                            break;
-                        }
-                    }
-                    if(!foundReferrer) {
-                        alert("Invalid Refer Code! No bonus added.");
-                    }
-                }
-            }
-
-            window.currentUser = { 
-                email: email, password: pass, balance: startingBalance, 
-                dailyData: {spins:0, captchas:0}, myReferCode: myNewCode
-            };
-            window.bal = startingBalance;
-            await set(userRef, window.currentUser);
-            loginSuccess();
-        };
-
-        window.handleLogin = async function() {
-            let email = document.getElementById('userEmail').value.trim();
-            let pass = document.getElementById('userPass').value.trim();
-            let safeEmail = email.replace(/\./g, ',');
-            const userRef = ref(db, 'users/' + safeEmail);
-            const snap = await get(userRef);
-            if(snap.exists() && snap.val().password === pass) {
-                let userData = snap.val();
-                if(!userData.myReferCode || userData.myReferCode === "N/A") {
-                    userData.myReferCode = generate6DigitCode();
-                    update(userRef, { myReferCode: userData.myReferCode });
-                }
-                window.currentUser = userData;
-                window.bal = userData.balance || 0;
-                loginSuccess();
-            } else alert("Invalid Login!");
-        };
-
-        function loginSuccess() {
-            document.getElementById('authPage').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('bottomNav').style.display = 'flex';
-            document.getElementById('userDisplay').innerText = "Account: " + window.currentUser.email;
-            document.getElementById('displayMyCode').innerText = window.currentUser.myReferCode;
-            updateUI();
-        }
-
-        window.saveToDB = function() {
-            if(!window.currentUser) return;
-            let safeEmail = window.currentUser.email.replace(/\./g, ',');
-            update(ref(db, 'users/' + safeEmail), { balance: window.bal });
-        };
-
-        window.selectWAmt = (amt) => {
-            window.selectedWAmt = amt;
-            document.querySelectorAll('.w-btn').forEach(b => b.classList.remove('selected'));
-            document.getElementById('wb' + amt).classList.add('selected');
-        };
-
-        window.handleWithdraw = function() {
-            let upi = document.getElementById('upiId').value;
-            let a = window.selectedWAmt;
-            if(!upi) return alert("Enter UPI ID");
-            if(!a) return alert("Amount choose karein");
-            if(window.bal < a) return alert("Balance kam hai!");
-            window.bal -= a;
-            const newReq = push(ref(db, 'withdrawals'));
-            set(newReq, { id: newReq.key, amount: a, upi: upi, status: "Pending", date: new Date().getTime(), user: window.currentUser.email }).then(() => { window.saveToDB(); updateUI(); alert("Withdrawal Request Sent!"); });
-        };
-
-        onValue(ref(db, 'withdrawals'), (snap) => {
-            const data = snap.val();
-            if(data && window.currentUser) {
-                const myReqs = Object.values(data).filter(d => d.user === window.currentUser.email);
-                window.historyData = [...myReqs].reverse();
-                window.renderHistory();
-                const withdrawnAmts = myReqs.map(r => r.amount);
-                if(withdrawnAmts.includes(10)) document.getElementById('wb10').style.display = 'none';
-                if(withdrawnAmts.includes(50)) document.getElementById('wb50').style.display = 'none';
-                if(withdrawnAmts.includes(100)) document.getElementById('wb100').style.display = 'none';
-                let admHtml = "";
-                Object.keys(data).forEach(k =
+</body>
+</html>
