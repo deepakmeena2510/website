@@ -1,119 +1,110 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>All In One Earning App</title>
+<title>Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Adsense (WebView + Website safe) -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <style>
-body{margin:0;font-family:Arial;background:#f2f2f2}
-header{background:#27ae60;color:#fff;padding:15px;text-align:center}
-.card{background:#fff;margin:15px;padding:15px;border-radius:10px}
-.btn{background:#27ae60;color:#fff;padding:12px;border:none;width:100%;border-radius:8px;font-size:16px}
-input{width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #ccc}
-.hide{display:none}
-nav{position:fixed;bottom:0;width:100%;display:flex;background:#fff;border-top:1px solid #ccc}
-nav div{flex:1;text-align:center;padding:10px;font-size:14px}
-.active{color:#27ae60;font-weight:bold}
+body{
+  font-family: Arial;
+  background:#f2f2f2;
+  padding:20px;
+}
+.box{
+  background:#fff;
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:8px;
+}
+input,button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+}
+button{
+  background:#27ae60;
+  color:white;
+  border:none;
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN / SIGNUP -->
-<div id="auth">
-<header>Login / Sign Up</header>
-<div class="card">
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="pass" placeholder="Password">
-<button class="btn" onclick="login()">LOGIN</button>
-<br><br>
-<button class="btn" onclick="signup()">SIGN UP</button>
-</div>
+<h2>🔐 Admin Panel</h2>
+
+<div class="box">
+  <h3>Add Balance</h3>
+  <input id="uid" placeholder="User UID">
+  <input id="amount" type="number" placeholder="Amount">
+  <button onclick="addBalance()">Add Balance</button>
 </div>
 
-<!-- MAIN APP -->
-<div id="app" class="hide">
-<header>Welcome</header>
-
-<div class="card">
-<h3>Balance: ₹<span id="bal">0</span></h3>
+<div class="box">
+  <h3>Withdraw Requests</h3>
+  <div id="withdraws">Loading...</div>
 </div>
 
-<div class="card">
-<button class="btn" onclick="earn()">Earn ₹5</button>
-</div>
-
-<div class="card">
-<input type="text" id="upi" placeholder="Enter UPI ID">
-<button class="btn" onclick="withdraw()">Withdraw ₹50</button>
-</div>
-</div>
-
-<nav id="nav" class="hide">
-<div class="active">Home</div>
-</nav>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
+<script>
+/* 🔴 APNA FIREBASE CONFIG YAHA DALO */
 const firebaseConfig = {
-apiKey: "AIzaSyCPXY9pfY2vrKNEOgenBkYpQqa2SSUQLTk",
-authDomain: "talks-b6037.firebaseapp.com",
-databaseURL: "https://talks-b6037-default-rtdb.firebaseio.com",
-projectId: "talks-b6037",
-storageBucket: "talks-b6037.appspot.com",
-messagingSenderId: "231660762364",
-appId: "1:231660762364:web:e1a9589b00d11221d0d379"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
 
-let userEmail="", balance=0;
+/* 🔐 Admin check */
+auth.onAuthStateChanged(user=>{
+  if(!user){
+    alert("Login required");
+    return;
+  }
+  db.ref("users/"+user.uid+"/role").once("value",snap=>{
+    if(snap.val() !== "admin"){
+      alert("Access denied");
+      document.body.innerHTML="❌ Not Admin";
+    }
+  });
+});
 
-window.signup = async ()=>{
-let e=email.value, p=pass.value;
-if(!e||!p){alert("Fill all");return;}
-let key=e.replace(/\./g,",");
-await set(ref(db,"users/"+key),{email:e,password:p,balance:0});
-alert("Signup Success");
-};
+/* 💰 Add balance */
+function addBalance(){
+  let uid = document.getElementById("uid").value;
+  let amt = Number(document.getElementById("amount").value);
+  if(!uid || !amt) return alert("Fill all");
 
-window.login = async ()=>{
-let e=email.value, p=pass.value;
-let key=e.replace(/\./g,",");
-let snap=await get(ref(db,"users/"+key));
-if(snap.exists() && snap.val().password===p){
-userEmail=e;
-balance=snap.val().balance||0;
-bal.innerText=balance;
-auth.classList.add("hide");
-app.classList.remove("hide");
-nav.classList.remove("hide");
-}else alert("Wrong Login");
-};
+  db.ref("balances/"+uid+"/coins").once("value",snap=>{
+    let old = snap.val() || 0;
+    db.ref("balances/"+uid).set({
+      coins: old + amt
+    });
+    alert("Balance added");
+  });
+}
 
-window.earn = async ()=>{
-balance+=5;
-bal.innerText=balance;
-let key=userEmail.replace(/\./g,",");
-update(ref(db,"users/"+key),{balance:balance});
-};
-
-window.withdraw = async ()=>{
-if(balance<50){alert("Minimum ₹50");return;}
-if(!upi.value){alert("Enter UPI");return;}
-balance-=50;
-bal.innerText=balance;
-let key=userEmail.replace(/\./g,",");
-update(ref(db,"users/"+key),{balance:balance});
-alert("Withdraw Request Sent");
-};
+/* 📤 Withdraw requests */
+db.ref("withdraws").on("value",snap=>{
+  let html="";
+  snap.forEach(s=>{
+    let d=s.val();
+    html+=`<p>${d.uid} - ₹${d.amount} - ${d.upi}</p>`;
+  });
+  document.getElementById("withdraws").innerHTML = html || "No requests";
+});
 </script>
 
 </body>
