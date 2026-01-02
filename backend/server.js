@@ -1,23 +1,51 @@
+// ===============================
+// AI Video Earning App - Backend
+// Server Start File
+// ===============================
+
+// Express import
 const express = require("express");
-const mongoose = require("mongoose");
+
+// CORS (mobile app / website connect ke liye)
 const cors = require("cors");
 
-const authRoutes = require("./routes/auth");
-const userRoutes = require("./routes/user");
-const videoRoutes = require("./routes/video");
-const adminRoutes = require("./routes/admin");
+// Database connect
+const connectDB = require("./config/db");
 
+// App banaya
 const app = express();
+
+// ===============================
+// Middleware
+// ===============================
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // JSON data read karne ke liye
 
-mongoose.connect("mongodb://127.0.0.1:27017/ai_video_app");
+// ===============================
+// Database Connect
+// ===============================
+connectDB();
 
-app.use("/api/auth", authRoutes);
-app.use("/api/user", userRoutes);
-app.use("/api/video", videoRoutes);
-app.use("/api/admin", adminRoutes);
+// ===============================
+// Routes (abhi empty, baad me code aayega)
+// ===============================
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/user", require("./routes/user"));
+app.use("/api/video", require("./routes/video"));
+app.use("/api/admin", require("./routes/admin"));
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+// ===============================
+// Test Route
+// ===============================
+app.get("/", (req, res) => {
+  res.send("AI Video Earning App Backend Running");
+});
+
+// ===============================
+// Server Listen
+// ===============================
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
