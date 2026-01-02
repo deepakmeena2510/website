@@ -1,31 +1,23 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
 
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Home from "./pages/Home";
-import Reels from "./pages/Reels";
-import Profile from "./pages/Profile";
+/*
+  यह फाइल वेबसाइट की शुरुआत है
+  यहीं से पूरा React Web App चलता है
+*/
 
-function App() {
-  return (
-    <Routes>
-      {/* Default route */}
-      <Route path="/" element={<Navigate to="/login" />} />
+const root = document.getElementById("root");
 
-      {/* Auth pages */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-
-      {/* Main pages */}
-      <Route path="/home" element={<Home />} />
-      <Route path="/reels" element={<Reels />} />
-      <Route path="/profile" element={<Profile />} />
-
-      {/* 404 */}
-      <Route path="*" element={<h2>पेज नहीं मिला</h2>} />
-    </Routes>
-  );
+if (!root) {
+  throw new Error("root div नहीं मिला, index.html चेक करो");
 }
 
-export default App;
+ReactDOM.createRoot(root).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+);
