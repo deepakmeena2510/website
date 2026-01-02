@@ -1,8 +1,18 @@
-const mongoose = require("mongoose");
+const router = require("express").Router();
+const Video = require("../models/Video");
+const User = require("../models/User");
 
-const VideoSchema = new mongoose.Schema({
-  url: String,
-  approved: { type: Boolean, default: false }
+router.get("/", async (req, res) => {
+  const videos = await Video.find({ approved: true });
+  res.json(videos);
 });
 
-module.exports = mongoose.model("Video", VideoSchema);
+router.post("/watch/:id", async (req, res) => {
+  const user = await User.findById(req.body.userId);
+  user.coins += 1;
+  user.watchedVideos += 1;
+  await user.save();
+  res.json({ coins: user.coins });
+});
+
+module.exports = router;
