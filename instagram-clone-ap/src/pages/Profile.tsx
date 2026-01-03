@@ -1,3 +1,9 @@
 export default function Profile() {
-  return <h2>Profile Page</h2>;
+  return (
+    <div style={{ textAlign: "center", marginTop: 60 }}>
+      <h2>Profile</h2>
+      <p>Username: demo_user</p>
+      <p>Posts: 0</p>
+    </div>
+  );
 }
