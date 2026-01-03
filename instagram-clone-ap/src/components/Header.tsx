@@ -1,7 +1,14 @@
 export default function Header() {
   return (
-    <h2 style={{ textAlign: 'center' }}>
-      📸 Instagram Clone
-    </h2>
+    <div style={{
+      padding: 15,
+      textAlign: 'center',
+      fontWeight: 'bold',
+      fontSize: 22,
+      borderBottom: '1px solid #ddd',
+      background: '#fff'
+    }}>
+      Instagram Clone
+    </div>
   )
 }
