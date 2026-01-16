@@ -2,343 +2,311 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earning App Pro - Final</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MASTER GOD v24.0 - MAX PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #27ae60; --dark: #2c3e50; --bg: #f4f7f6; --paytm: #00baf2; --phonepe: #6739b7; }
-        body { font-family: sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; text-align: center; color: #333; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         
-        /* Layouts */
-        #authPage { display: block; padding: 30px 20px; background: var(--bg); min-height: 100vh; position: fixed; width: 100%; z-index: 1000; top: 0; left: 0; box-sizing: border-box; overflow-y: auto; }
-        .auth-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
-        input { width: 95%; padding: 15px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
-        .active { display: block; }
-        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-        .card { background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        :root { 
+            --main-bg: #020617; 
+            --card-bg: #0f172a; 
+            --accent: #3b82f6; 
+            --border: rgba(255, 255, 255, 0.1);
+            --success: #10b981;
+        }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--main-bg); 
+            color: #f8fafc; margin: 0; padding: 0; 
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        /* Install Button Style */
-        .install-banner { background: #f1c40f; color: #000; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: bold; cursor: pointer; border: none; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        /* --- LOGIN PAGE PRE-INSTALLED LOOK --- */
+        #login-page { 
+            position: fixed; inset: 0; 
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%); 
+            display: flex; align-items: center; justify-content: center; 
+            z-index: 100000; padding: 20px; 
+        }
+        .login-card { 
+            background: rgba(15, 23, 42, 0.85); 
+            backdrop-filter: blur(50px); 
+            border: 1px solid var(--border); 
+            padding: 50px 30px; border-radius: 45px; 
+            width: 100%; max-width: 420px; 
+            text-align: center; box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+        }
 
-        /* Dynamic App Style */
-        .dyn-card { background: white; padding: 12px; border-radius: 12px; margin-bottom: 12px; display: flex; align-items: center; text-align: left; box-shadow: 0 3px 8px rgba(0,0,0,0.1); border-left: 5px solid #e67e22; }
-        .app-img { width: 50px; height: 50px; border-radius: 10px; margin-right: 12px; object-fit: cover; background: #eee; }
-        .app-info { flex-grow: 1; }
-        .app-reward { font-weight: bold; color: green; margin-right: 10px; min-width: 45px; text-align: right; }
+        /* --- DASHBOARD SECTION --- */
+        #admin-panel { display: none; padding: 15px; }
+        
+        .main-header {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            padding: 20px; border-radius: 25px;
+            margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
 
-        /* Offers & Referral */
-        .offer-card { background: linear-gradient(135deg, var(--phonepe), #512da8); color: white; padding: 20px; border-radius: 15px; margin: 15px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; text-align: left; }
-        .paytm-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 6px 15px rgba(0,0,0,0.1); margin: 15px 0; border: 1px solid #ddd; }
-        .paytm-header { background: var(--paytm); color: white; padding: 12px; font-weight: bold; }
-        .step-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
-        .refer-box { border: 2px dashed var(--primary); background: #f9fffb; padding: 15px; border-radius: 15px; margin-top: 15px; }
+        /* --- 4 COLUMN GRID --- */
+        .folder-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px; 
+            padding: 0 5px 100px 5px; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .folder-card {
+            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%); 
+            border: 1px solid var(--border);
+            border-radius: 18px; 
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; 
+            padding: 12px 4px;
+            transition: all 0.3s ease;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+        }
+        .folder-card:active { transform: scale(0.9); border-color: var(--accent); }
+        .folder-card i { font-size: 1.2rem; margin-bottom: 6px; }
+        
+        .folder-card h3 { 
+            font-size: 7.5px; 
+            font-weight: 800; 
+            text-transform: uppercase; color: #ffffff; 
+            text-align: center; width: 100%;
+            line-height: 1.2;
+            white-space: normal;
+            word-wrap: break-word;
+        }
 
-        /* Games */
-        #wheel { width: 220px; height: 220px; border-radius: 50%; border: 8px solid #2c3e50; margin: 20px auto; transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1); background: conic-gradient(#27ae60 0deg 120deg, #e67e22 120deg 240deg, #3498db 240deg 360deg); }
-        .w-levels { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .w-btn { padding: 12px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; background: #fff; }
-        .w-btn.selected { border-color: var(--primary); background: #eafaf1; color: var(--primary); }
-        .hidden-btn { display: none !important; }
+        /* --- INPUTS & BUTTONS --- */
+        .custom-input { 
+            background: rgba(0,0,0,0.3) !important; 
+            border: 1px solid rgba(255,255,255,0.1) !important; 
+            color: #fff !important; border-radius: 15px; padding: 18px; 
+            width: 100%; font-weight: 600; outline: none; margin-bottom: 20px;
+            font-size: 14px;
+        }
 
-        /* Nav & Modal */
-        .nav { position: fixed; bottom: 0; width: 100%; background: white; display: none; border-top: 1px solid #ddd; padding: 12px 0; z-index: 100; justify-content: space-around; }
-        .nav-item { color: #95a5a6; cursor: pointer; font-size: 14px; font-weight: bold; }
-        .active-nav { color: var(--primary); }
-        .modal { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
-        .modal-content { background: white; margin: 15% auto; padding: 25px; width: 85%; border-radius: 15px; position: relative; }
+        .btn-sync { 
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+            color: white; width: 100%; padding: 18px; 
+            border-radius: 22px; font-weight: 900; 
+            text-transform: uppercase; border: none;
+            letter-spacing: 1px;
+        }
+
+        /* --- MODULE OVERLAY --- */
+        .tab-view { 
+            display: none; position: fixed; inset: 0; 
+            background: #020617; z-index: 90000; 
+            overflow-y: auto; padding: 30px 20px; 
+        }
+        .tab-view.active { display: block; }
+        
+        .module-container {
+            background: #0f172a; 
+            border-radius: 35px; 
+            padding: 40px 20px; 
+            border: 1px solid var(--border); 
+            max-width: 500px; 
+            margin: 0 auto; 
+            text-align: center;
+            position: relative;
+        }
+
+        .db-path {
+            font-size: 10px;
+            color: #64748b;
+            margin-bottom: 20px;
+            font-family: monospace;
+            background: rgba(0,0,0,0.2);
+            padding: 5px 12px;
+            border-radius: 10px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
 
-    <div id="authPage">
-        <h2>Earning App Pro</h2>
-        <div class="auth-card">
-            <input type="email" id="userEmail" placeholder="Email Address">
-            <input type="password" id="userPass" placeholder="Password (Min 6 chars)">
-            <div id="regBox">
-                <input type="text" id="joinReferCode" placeholder="Refer Code (Optional)">
-                <button class="btn" onclick="handleSignUp()">अकाउंट बनाएं</button>
-                <p onclick="toggleAuth(false)" style="color:blue; cursor:pointer; margin-top:10px;">लॉगिन करें</p>
+    <div id="login-page">
+        <div class="login-card">
+            <div class="mb-6 inline-flex p-6 rounded-full bg-blue-500/10 text-blue-500 text-6xl">
+                <i class="fas fa-fingerprint"></i>
             </div>
-            <div id="logBox" style="display:none;">
-                <button class="btn" onclick="handleLogin()">लॉगिन करें</button>
-                <p onclick="toggleAuth(true)" style="color:blue; cursor:pointer; margin-top:10px;">नया अकाउंट बनाएं</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="mainApp" style="display:none;">
-        <div id="homePage" class="page active">
-            <h2 onclick="openAdmin()">नमस्ते! 👋</h2>
-
-            <button class="install-banner" onclick="toggleModal('installModal', true)">
-                📲 <span>ऐप को फोन में इंस्टॉल करें</span>
-            </button>
-
-            <div class="card" style="background:var(--dark); color:white;">
-                <p>कुल बैलेंस</p>
-                <h1>₹<span id="balHome">0</span></h1>
-                <small id="userDisplay"></small>
-            </div>
-
-            <div id="dynamicAppList"></div>
-
-            <div class="offer-card" onclick="window.open('https://phon.pe/7yhp93x2', '_blank')">
-                <div><b>PhonePe रिवॉर्ड</b><br><small>क्लिक करें और ₹100 जीतें</small></div>
-                <div style="font-size: 20px; font-weight: bold;">₹100</div>
-            </div>
-
-            <div class="paytm-card">
-                <div class="paytm-header">Paytm Offer (₹100)</div>
-                <div class="step-row">
-                    <div><b>Step 1: रजिस्ट्रेशन</b><br><small>ऐप इंस्टॉल करें</small></div>
-                    <button class="btn" style="padding:5px 10px; width:auto; font-size:12px; background:var(--paytm);" onclick="window.open('https://p.paytm.me/xCTH/wbdy7fzi', '_blank')">₹50</button>
-                </div>
-                <div class="step-row">
-                    <div><b>Step 2: पेमेंट</b><br><small>पहला ₹1 भेजें</small></div>
-                    <button class="btn" style="padding:5px 10px; width:auto; font-size:12px; background:var(--paytm);" onclick="window.open('https://p.paytm.me/xCTH/wbdy7fzi', '_blank')">₹50</button>
-                </div>
-            </div>
-
-            <div class="refer-box">
-                <span>👫 Refer & Earn (₹10)</span>
-                <div id="displayMyCode" style="font-size:22px; font-weight:bold; margin:10px 0;">...</div>
-                <button class="btn" style="padding:10px; font-size:14px; background:var(--dark);" onclick="copyRefer()">Share Link & Code</button>
-            </div>
-        </div>
-
-        <div id="tasksPage" class="page">
-            <h3>टास्क</h3>
-            <div class="card" onclick="showCol('spinTask')">🎡 स्पिन व्हील <small id="sCount">0/3</small></div>
-            <div class="card" onclick="showCol('capTask')">🧩 कैप्चा टास्क <small id="cCount">0/3</small></div>
-        </div>
-
-        <div id="spinTask" class="page">
-            <button class="btn" style="background:#95a5a6; width:auto; padding:5px 15px;" onclick="showCol('tasksPage', 'nTasks')">Back</button>
-            <div class="card">
-                <div id="wheel"></div>
-                <button id="spinBtn" class="btn" onclick="doSpin()">Spin Now</button>
-            </div>
-        </div>
-
-        <div id="capTask" class="page">
-            <button class="btn" style="background:#95a5a6; width:auto; padding:5px 15px;" onclick="showCol('tasksPage', 'nTasks')">Back</button>
-            <div class="card">
-                <div id="capCode" style="font-size:32px; font-weight:bold; background:#eee; padding:15px; letter-spacing:10px;">...</div>
-                <input type="text" id="capInput" placeholder="कोड यहाँ लिखें">
-                <button class="btn" onclick="doCaptcha()">Submit</button>
-            </div>
-        </div>
-
-        <div id="withdrawPage" class="page">
-            <div style="text-align:right;"><button onclick="toggleModal('historyModal', true)" style="border:none; background:none; font-size:24px;">🕒</button></div>
-            <h3>वॉलेट</h3>
-            <div class="card">
-                <p>बैलेंस: ₹<span id="balWithdraw">0</span></p>
-                <input type="text" id="upiId" placeholder="UPI ID (Paytm/PhonePe)">
-                <div class="w-levels">
-                    <div class="w-btn" id="wb10" onclick="selectWAmt(10)">₹10</div>
-                    <div class="w-btn" id="wb50" onclick="selectWAmt(50)">₹50</div>
-                    <div class="w-btn" id="wb100" onclick="selectWAmt(100)">₹100</div>
-                    <div class="w-btn" id="wb200" onclick="selectWAmt(200)">₹200</div>
-                    <div class="w-btn" id="wb500" onclick="selectWAmt(500)">₹500</div>
-                </div>
-                <button class="btn" style="background:#e67e22" onclick="handleWithdraw()">Withdraw Now</button>
-            </div>
-        </div>
-
-        <nav id="bottomNav" class="nav">
-            <div class="nav-item active-nav" id="nHome" onclick="showCol('homePage', 'nHome')">🏠<br>होम</div>
-            <div class="nav-item" id="nTasks" onclick="showCol('tasksPage', 'nTasks')">🎯<br>टास्क</div>
-            <div class="nav-item" id="nWithdraw" onclick="showCol('withdrawPage', 'nWithdraw')">💰<br>वॉलेट</div>
-        </nav>
-    </div>
-
-    <div id="historyModal" class="modal"><div class="modal-content"><span onclick="toggleModal('historyModal', false)" style="float:right; cursor:pointer; font-size:28px;">&times;</span><h4>हिस्ट्री</h4><div id="withdrawHistory">Loading...</div></div></div>
-
-    <div id="installModal" class="modal">
-        <div class="modal-content">
-            <span onclick="toggleModal('installModal', false)" style="float:right; cursor:pointer; font-size:28px;">&times;</span>
-            <h3 style="color:var(--primary)">📲 ऐप इंस्टॉल करें</h3>
-            <div style="text-align:left; font-size:14px; line-height:1.6;">
-                <p><b>1.</b> ऊपर कोने में <b>3 डॉट्स (⋮)</b> या शेयर बटन पर क्लिक करें।</p>
-                <p><b>2.</b> अब <b>'Add to Home Screen'</b> या <b>'Install App'</b> बटन को दबाएं।</p>
-                <p><b>3.</b> अब यह ऐप आपके मोबाइल की होम स्क्रीन पर आ जाएगा!</p>
-            </div>
+            <h1 class="text-4xl font-black mb-1 italic">MASTER<span class="text-blue-500">GOD</span></h1>
+            <p class="text-[10px] text-slate-500 mb-10 uppercase tracking-[4px] font-bold">Cloud Authentication Active</p>
             
-            <button class="btn" style="margin-top:15px;" onclick="toggleModal('installModal', false)">ठीक है, समझ गया</button>
+            <input type="email" id="auth-email" placeholder="Your Registered Email" class="custom-input">
+            <input type="password" id="auth-pass" placeholder="Secure Password" class="custom-input">
+            
+            <button onclick="handleCloudLogin()" class="btn-sync" id="auth-btn">Authorize Entry</button>
         </div>
+    </div>
+
+    <div id="admin-panel">
+        <div class="main-header">
+            <div>
+                <h1 class="text-xl font-black italic">GOD<span class="text-blue-500">.</span>HUB</h1>
+                <p class="text-[8px] text-emerald-500 font-bold uppercase tracking-widest">● System Encryption Active</p>
+            </div>
+            <button onclick="location.reload()" class="h-10 w-10 bg-red-500/10 text-red-500 rounded-xl flex items-center justify-center border border-red-500/20"><i class="fas fa-power-off text-sm"></i></button>
+        </div>
+
+        <div class="folder-grid" id="main-grid"></div>
+    </div>
+
+    <div id="universal-tab" class="tab-view">
+        <div class="flex items-center justify-between mb-8 px-2">
+            <button onclick="closeFolder()" class="h-12 w-12 bg-slate-900 border border-white/10 rounded-2xl flex items-center justify-center"><i class="fas fa-arrow-left"></i></button>
+            <h2 id="tab-title" class="text-lg font-black italic uppercase tracking-wider">MODULE</h2>
+            <div class="h-12 w-12 flex items-center justify-center text-emerald-500 bg-emerald-500/10 rounded-full border border-emerald-500/20">
+                <i class="fas fa-circle text-[8px]"></i>
+            </div>
+        </div>
+        <div id="tab-content"></div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, get, update, onValue, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyCPXY9pfY2vrKNEOgenBkYpQqa2SSUQLTk",
-            authDomain: "talks-b6037.firebaseapp.com",
-            databaseURL: "https://talks-b6037-default-rtdb.firebaseio.com",
-            projectId: "talks-b6037",
-            storageBucket: "talks-b6037.firebasestorage.app",
-            appId: "1:231660762364:web:e1a9589b00d11221d0d379"
+            apiKey: "AIzaSyCPvpgRkqIEdpmrvKWh-GBS04BQj2_8SAI",
+            authDomain: "earning-app-c048f.firebaseapp.com",
+            databaseURL: "https://earning-app-c048f-default-rtdb.firebaseio.com",
+            projectId: "earning-app-c048f",
+            storageBucket: "earning-app-c048f.firebasestorage.app",
+            messagingSenderId: "1089921883808",
+            appId: "1:1089921883808:web:b09e829bd2017be218f3c5"
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getDatabase(app);
 
-        window.currentUser = null;
-        window.bal = 0;
-        window.daily = { spins: 0, captchas: 0 };
-        window.selectedWAmt = 0;
-        let currentCaptcha = "";
+        const folders = [
+            {id:"withdraw", hi:"Withdrawal", i:"wallet", c:"#fb923c", p:"Enter Amount Status"},
+            {id:"users", hi:"User List", i:"users", c:"#4ade80", p:"Search User ID"}, 
+            {id:"tasks", hi:"Task Control", i:"tasks", c:"#60a5fa", p:"Task Reward Value"},
+            {id:"promo", hi:"Promo Code", i:"ticket-alt", c:"#c084fc", p:"New Promo Code"},
+            {id:"refer", hi:"Refer System", i:"gift", c:"#f87171", p:"Points per Refer"},
+            {id:"daily", hi:"Daily Login", i:"calendar-check", c:"#facc15", p:"Daily Bonus Amount"},
+            {id:"security", hi:"Firewall", i:"shield-alt", c:"#ef4444", p:"System Protection Mode"},
+            {id:"ads", hi:"Ads Manager", i:"play-circle", c:"#38bdf8", p:"Ad Unit ID"},
+            {id:"leader", hi:"Leaderboard", i:"trophy", c:"#fbbf24", p:"Ranking Limit"},
+            {id:"notice", hi:"Global News", i:"bullhorn", c:"#a855f7", p:"Enter Global Notice"},
+            {id:"limits", hi:"App Limits", i:"clock", c:"#94a3b8", p:"Max Daily Limit"},
+            {id:"settings", hi:"System Config", i:"cog", c:"#ffffff", p:"Server Key Value"},
+            {id:"giftcard", hi:"Redeem Card", i:"key", c:"#60a5fa", p:"Gift Card Code"},
+            {id:"aicheat", hi:"AI Guard", i:"robot", c:"#f87171", p:"Anti-Cheat Level"},
+            {id:"stats", hi:"Live Stats", i:"chart-bar", c:"#4ade80", p:"Stat Refresh Rate"},
+            {id:"update", hi:"App Update", i:"sync-alt", c:"#fb923c", p:"Latest Version Code"},
+            {id:"rich", hi:"Notifications", i:"bell", c:"#c084fc", p:"Broadcast Message"},
+            {id:"minpay", hi:"Min Payout", i:"minus-circle", c:"#f87171", p:"Minimum Payout"},
+            {id:"maint", hi:"Maintenance", i:"server", c:"#60a5fa", p:"Maintenance Status"},
+            {id:"bonus", hi:"Extra Bonus", i:"coins", c:"#facc15", p:"Extra Bonus Value"},
+            {id:"logs", hi:"Activity Logs", i:"history", c:"#94a3b8", p:"Activity Log Path"},
+            {id:"backup", hi:"Database", i:"database", c:"#4ade80", p:"Auto Backup Path"},
+            {id:"mail", hi:"Broadcast", i:"envelope", c:"#38bdf8", p:"Mail Content"},
+            {id:"support", hi:"Help Center", i:"headset", c:"#60a5fa", p:"Support Link"},
+            {id:"verify", hi:"KYC Verify", i:"user-check", c:"#4ade80", p:"KYC Status Code"},
+            {id:"banners", hi:"Banner Ads", i:"images", c:"#c084fc", p:"Banner Image URL"},
+            {id:"scratch", hi:"Scratch Card", i:"layer-group", c:"#facc15", p:"Scratch Points"},
+            {id:"banlog", hi:"Blacklist", i:"user-slash", c:"#ef4444", p:"Banned User ID"},
+            {id:"filters", hi:"IP Filter", i:"filter", c:"#fb923c", p:"IP Block Range"},
+            {id:"files", hi:"Cloud Storage", i:"folder-open", c:"#94a3b8", p:"Cloud Path"},
+            {id:"devices", hi:"ID Blocker", i:"mobile-alt", c:"#f87171", p:"Device ID Block"},
+            {id:"spin", hi:"Lucky Spin", i:"dharmachakra", c:"#facc15", p:"Spin Reward Value"},
+            {id:"news", hi:"News Feed", i:"newspaper", c:"#38bdf8", p:"News API Key"},
+            {id:"streak", hi:"User Streak", i:"fire", c:"#fb923c", p:"Daily Streak Goal"},
+            {id:"vpn", hi:"VPN Blocker", i:"shield-virus", c:"#a855f7", p:"VPN Status Detection"},
+            {id:"target", hi:"Milestones", i:"bullseye", c:"#ef4444", p:"Milestone Points"},
+            {id:"prize", hi:"Jackpot", i:"crown", c:"#fbbf24", p:"Winning Amount"},
+            {id:"otp", hi:"SMS Gateway", i:"sms", c:"#60a5fa", p:"OTP Gateway ID"},
+            {id:"voice", hi:"Voice Alert", i:"microphone", c:"#c084fc", p:"Alert URL"},
+            {id:"scheduler", hi:"Cron Job", i:"calendar-alt", c:"#94a3b8", p:"Cron Timer Value"},
+            {id:"jackpot", hi:"Mega Prize", i:"gem", c:"#fbbf24", p:"Prize Pool Value"},
+            {id:"recblock", hi:"Rec Blocker", i:"video-slash", c:"#ef4444", p:"Recorder Sensitivity"},
+            {id:"deeplink", hi:"Smart Link", i:"link", c:"#38bdf8", p:"Smart Link URL"},
+            {id:"rating", hi:"App Review", i:"star", c:"#facc15", p:"Review Link URL"},
+            {id:"forceup", hi:"Hard Update", i:"arrow-circle-up", c:"#60a5fa", p:"Force Version"},
+            {id:"multi", hi:"Multiplier", i:"bolt", c:"#fb923c", p:"Earning Multiplier"},
+            {id:"themes", hi:"Theme Lab", i:"palette", c:"#c084fc", p:"Custom Theme Hex"},
+            {id:"auto", hi:"Automation", i:"magic", c:"#4ade80", p:"Automation Script"},
+            {id:"view-bal", hi:"Wallet Check", i:"eye", c:"#10b981", p:"User Balance Check"},
+            {id:"edit-bal", hi:"Admin Edit", i:"edit", c:"#ef4444", p:"Manual Balance Edit"}
+        ];
 
-        // --- AUTH & NAV ---
-        window.toggleAuth = (s) => {
-            document.getElementById('regBox').style.display = s?'block':'none';
-            document.getElementById('logBox').style.display = s?'none':'block';
+        window.handleCloudLogin = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                renderGrid();
+            } catch (e) { alert("Access Denied: Invalid Key"); }
         };
 
-        window.handleSignUp = async () => {
-            let email = document.getElementById('userEmail').value.trim();
-            let pass = document.getElementById('userPass').value.trim();
-            if(!email || pass.length < 6) return alert("Email/Password check karen!");
-            let sEmail = email.replace(/\./g, ',');
-            let myCode = Math.random().toString(36).substring(2,8).toUpperCase();
-            let data = { email, password: pass, balance: 0, spins:0, captchas:0, myReferCode: myCode, withdrawn_10: false };
-            await set(ref(db, 'users/' + sEmail), data);
-            initApp(data);
+        function renderGrid() {
+            const grid = document.getElementById('main-grid');
+            grid.innerHTML = folders.map(f => `
+                <div onclick="openFolder('${f.id}', '${f.hi}', '${f.i}', '${f.c}', '${f.p}')" class="folder-card">
+                    <i class="fas fa-${f.i}" style="color:${f.c}"></i>
+                    <h3>${f.hi}</h3>
+                </div>
+            `).join('');
+        }
+
+        window.openFolder = async (id, title, icon, color, placeholder) => {
+            document.getElementById('tab-title').innerText = title;
+            document.getElementById('universal-tab').classList.add('active');
+            
+            const snapshot = await get(ref(db, `config/${id}`));
+            const currentVal = snapshot.exists() ? snapshot.val() : "";
+
+            document.getElementById('tab-content').innerHTML = `
+                <div class="module-container" style="border-top: 5px solid ${color}">
+                    <div class="mb-6 inline-flex p-5 rounded-3xl bg-white/5 text-5xl" style="color:${color}">
+                        <i class="fas fa-${icon}"></i>
+                    </div>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Configuring Module</p>
+                    <h2 class="text-2xl font-black mb-1 italic uppercase">${title}</h2>
+                    <div class="db-path">database path: /config/${id}</div>
+                    
+                    <div class="text-left px-2">
+                        <label class="text-[10px] uppercase font-bold text-slate-500 mb-2 block tracking-widest">SET VALUE FOR MODULE</label>
+                        <input type="text" id="sync-input" value="${currentVal}" placeholder="${placeholder}" class="custom-input">
+                    </div>
+
+                    <button onclick="cloudSync('${id}')" id="push-btn" class="btn-sync" style="background:${color}">
+                        SYNC WITH CLOUD
+                    </button>
+                    
+                    <p class="text-[9px] mt-6 text-slate-600 font-bold uppercase tracking-widest italic">master protocol encryption active</p>
+                </div>
+            `;
         };
 
-        window.handleLogin = async () => {
-            let email = document.getElementById('userEmail').value.trim();
-            let pass = document.getElementById('userPass').value.trim();
-            let sEmail = email.replace(/\./g, ',');
-            const snap = await get(ref(db, 'users/'+sEmail));
-            if(snap.exists() && snap.val().password === pass) initApp(snap.val());
-            else alert("गलत डिटेल्स!");
-        };
+        window.closeFolder = () => document.getElementById('universal-tab').classList.remove('active');
 
-        function initApp(userData) {
-            window.currentUser = userData;
-            localStorage.setItem('earnings_user', userData.email);
-            document.getElementById('authPage').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('bottomNav').style.display = 'flex';
-            document.getElementById('userDisplay').innerText = userData.email;
-            document.getElementById('displayMyCode').innerText = userData.myReferCode;
-
-            let sEmail = userData.email.replace(/\./g, ',');
-            onValue(ref(db, 'users/'+sEmail), (s) => {
-                if(s.exists()){
-                    let d = s.val();
-                    window.bal = d.balance || 0;
-                    window.daily.spins = d.spins || 0;
-                    window.daily.captchas = d.captchas || 0;
-                    document.getElementById('balHome').innerText = window.bal;
-                    document.getElementById('balWithdraw').innerText = window.bal;
-                    document.getElementById('sCount').innerText = window.daily.spins+"/3";
-                    document.getElementById('cCount').innerText = window.daily.captchas+"/3";
-                    if(d.withdrawn_10) document.getElementById('wb10').classList.add('hidden-btn');
-                }
+        window.cloudSync = (id) => {
+            const val = document.getElementById('sync-input').value;
+            set(ref(db, `config/${id}`), val).then(() => { 
+                alert("Cloud Synced Successfully!"); 
+                closeFolder(); 
             });
-            genCap(); loadAdminApps(); loadHistory();
-        }
-
-        // --- DYNAMIC APPS ---
-        function loadAdminApps() {
-            onValue(ref(db, 'customApps'), (snap) => {
-                const list = document.getElementById('dynamicAppList');
-                list.innerHTML = "";
-                if(snap.exists()) {
-                    Object.values(snap.val()).forEach(app => {
-                        list.innerHTML += `
-                        <div class="dyn-card">
-                            <img src="${app.logo || 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png'}" class="app-img">
-                            <div class="app-info"><b>${app.name}</b><br><small>${app.sub}</small></div>
-                            <div class="app-reward">${app.reward}</div>
-                            <button onclick="window.open('${app.link}', '_blank')" style="background:#e67e22; color:white; border:none; padding:8px 12px; border-radius:8px; font-weight:bold;">Install</button>
-                        </div>`;
-                    });
-                }
-            });
-        }
-
-        // --- TASKS ---
-        window.doSpin = async () => {
-            if(window.daily.spins >= 3) return alert("Limit Complete!");
-            let win = Math.floor(Math.random() * 3) + 1;
-            let deg = 1800 + (win * 120);
-            document.getElementById('wheel').style.transform = `rotate(${deg}deg)`;
-            setTimeout(async () => {
-                let sEmail = window.currentUser.email.replace(/\./g, ',');
-                await update(ref(db, 'users/'+sEmail), { balance: window.bal + win, spins: window.daily.spins + 1 });
-                alert("Won ₹" + win);
-                document.getElementById('wheel').style.transform = `rotate(0deg)`;
-            }, 4000);
         };
-
-        function genCap() {
-            currentCaptcha = Math.random().toString(36).substring(2,7).toUpperCase();
-            document.getElementById('capCode').innerText = currentCaptcha;
-        }
-        window.doCaptcha = async () => {
-            if(window.daily.captchas >= 3) return alert("Limit!");
-            if(document.getElementById('capInput').value.trim().toUpperCase() === currentCaptcha) {
-                let sEmail = window.currentUser.email.replace(/\./g, ',');
-                await update(ref(db, 'users/'+sEmail), { balance: window.bal + 1, captchas: window.daily.captchas + 1 });
-                document.getElementById('capInput').value = ""; genCap();
-            }
-        };
-
-        // --- WALLET ---
-        window.selectWAmt = (amt) => {
-            window.selectedWAmt = amt;
-            document.querySelectorAll('.w-btn').forEach(b => b.classList.remove('selected'));
-            document.getElementById('wb' + amt).classList.add('selected');
-        };
-
-        window.handleWithdraw = async () => {
-            let upi = document.getElementById('upiId').value;
-            let amt = window.selectedWAmt;
-            if(!upi || amt <= 0) return alert("UPI ID और Amount चुनें!");
-            if(window.bal < amt) return alert("बैलेंस कम है!");
-            let sEmail = window.currentUser.email.replace(/\./g, ',');
-            let upData = { balance: window.bal - amt };
-            if(amt === 10) upData.withdrawn_10 = true;
-            await set(push(ref(db, 'withdrawals')), { user: window.currentUser.email, amount: amt, upi, status: "Pending", date: Date.now() });
-            await update(ref(db, 'users/'+sEmail), upData);
-            alert("विथड्रॉ रिक्वेस्ट भेज दी गई!");
-        };
-
-        function loadHistory() {
-            onValue(ref(db, 'withdrawals'), (s) => {
-                let h = "";
-                if(s.exists()){
-                    Object.values(s.val()).reverse().forEach(r => {
-                        if(r.user === window.currentUser.email) h += `<div style="border-bottom:1px solid #ddd; padding:10px;">₹${r.amount} - <span style="color:orange">${r.status}</span></div>`;
-                    });
-                }
-                document.getElementById('withdrawHistory').innerHTML = h || "No data";
-            });
-        }
-
-        window.copyRefer = () => {
-            const msg = `Download App: ${window.location.href}\nUse Code: ${window.currentUser.myReferCode}\nEarn ₹10 Now!`;
-            navigator.clipboard.writeText(msg); alert("Copied!");
-        };
-
-        window.showCol = (id, nId) => {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(nId){ document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav')); document.getElementById(nId).classList.add('active-nav'); }
-        };
-        window.openAdmin = () => { if(prompt("Pass:")==="admin123") showCol('adminPage'); };
-        window.toggleModal = (id, o) => document.getElementById(id).style.display = o?'block':'none';
-
-        window.onload = async () => {
-            let email = localStorage.getItem('earnings_user');
-            if(email){
-                let sEmail = email.replace(/\./g, ',');
-                const snap = await get(ref(db, 'users/'+sEmail));
-                if(snap.exists()) initApp(snap.val()
+    </script>
+</body>
+</html>
